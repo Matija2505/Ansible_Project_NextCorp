@@ -76,8 +76,8 @@
 #
 
 - name: Create user share directories
-  ansible.builtin.file:
   loop: "{{ managed_users }}"
+  ansible.builtin.file:
     path: "{{ shared_users_root }}/{{ item.name }}"
     state: directory
     owner: "{{ item.name }}"
