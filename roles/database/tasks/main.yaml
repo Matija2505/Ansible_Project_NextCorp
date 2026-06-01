@@ -43,7 +43,7 @@
   community.mysql.mysql_db:
     name: "{{ item.name }}"
     state: present
-
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
 - name: Create application database users
   loop:
@@ -55,7 +55,7 @@
     priv: "{{ item.name }}.*:ALL"
     host: '%'
     state: present
-
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
 #
 # VALIDATE MYSQL
