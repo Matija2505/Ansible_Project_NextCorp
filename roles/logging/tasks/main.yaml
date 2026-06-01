@@ -49,10 +49,10 @@
   
   
  - name: Ensure rsyslog is enabled and running
-  ansible.builtin.service:
-    name: rsyslog
-    enabled: true
-    state: started
+   ansible.builtin.service:
+     name: rsyslog
+     enabled: true
+     state: started
 
 #
 # SELINUX
