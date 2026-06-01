@@ -56,8 +56,8 @@
 #
 
 - name: Configure sudo access
-  ansible.builtin.copy:
   loop: "{{ managed_users }}"
+  ansible.builtin.copy:
     dest: "/etc/sudoers.d/{{ item.name }}"
     content: "{{ item.name }} ALL=(ALL) NOPASSWD: ALL"
     owner: root
