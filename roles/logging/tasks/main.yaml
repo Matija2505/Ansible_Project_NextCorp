@@ -58,10 +58,10 @@
 # SELINUX
 #
 
-- name: Allow rsyslog TCP port in SELinux
-  ansible.posix.seboolean:
-    name: rsyslogd_network_connect
-    state: true
-    persistent: true
+#- name: Allow rsyslog TCP port in SELinux
+#  ansible.posix.seboolean:
+#   name: rsyslogd_network_connect
+#    state: true
+#    persistent: true
 
 ...
