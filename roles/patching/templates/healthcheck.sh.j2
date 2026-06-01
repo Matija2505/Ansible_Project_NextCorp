@@ -1,0 +1,17 @@
+LOGFILE="/var/log/nexcore-health.log"
+
+{
+    echo "===== $(date) ====="
+    echo "Hostname: $(hostname)"
+    echo ""
+    echo "--- Uptime ---"
+    uptime
+    echo ""
+    echo "--- Disk Usage ---"
+    df -h
+    echo ""
+} >> "$LOGFILE"
+
+mail -s "Daily Health Check $(hostname)" ops01@{{ domain_name }} < "$LOGFILE"
+
+

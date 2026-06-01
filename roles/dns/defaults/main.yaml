@@ -1,0 +1,30 @@
+---
+ bind_packages:
+   - bind
+   - bind-utils
+
+
+dns_search: "{{ dns_zone }}"
+dns_nameserver: "{{ hostvars['servera']['ansible_host'] }}"
+dns_zone: "{{ domain_name }}"
+dns_service: named
+
+dns_listen_ip: any
+
+dns_records:
+  - name: servera
+    ip: "{{ hostvars['servera']['ansible_host'] }}"
+
+  - name: serverb
+    ip: "{{ hostvars['serverb']['ansible_host'] }}"
+
+  - name: wiki
+    ip: "{{ hostvars['serverb']['ansible_host'] }}"
+
+  - name: www
+    ip: "{{ hostvars['serverb']['ansible_host'] }}"
+
+  - name: mail
+    ip: "{{ hostvars['servera']['ansible_host'] }}"
+
+...

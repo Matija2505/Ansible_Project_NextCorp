@@ -1,0 +1,10 @@
+protocols = imap
+mail_location = maildir:~/Maildir
+
+listen = *
+
+service imap-login {
+  inet_listener imap {
+    port = 143
+  }
+}

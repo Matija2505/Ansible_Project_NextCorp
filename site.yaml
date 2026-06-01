@@ -1,0 +1,54 @@
+---
+- name: Ensure users are created
+  hosts: all
+  become: true
+  roles:
+    - users
+
+
+- name: Ensure FW rules are in-place 
+  hosts: all
+  become: true
+  roles:
+    - security
+
+
+- name: Ensure DNS, Email, Logging are in-place
+  hosts: infra
+  become: true
+  roles:
+    - dns
+    - email
+    - logging
+
+
+- name: Ensure Storage & Database config-s are in-place
+  hosts: app
+  become: true
+  roles:
+    - storage
+    - database
+    - web
+
+
+- name: Ensure automount service is configured
+  hosts: automount_clients
+  become: true
+  roles:
+    - automount
+
+
+- name: Ensure maintenance tasks are configured
+  hosts: all
+  become: true
+  roles:
+    - patching
+
+
+- name: Ensure backup is in-place
+  hosts: serverb
+  become: true
+  roles:
+    - backup
+
+...

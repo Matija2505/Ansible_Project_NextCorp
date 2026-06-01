@@ -1,0 +1,40 @@
+---
+- name: Install firewalld
+  ansible.builtin.dnf:
+    name: firewalld
+    state: present
+
+- name: Ensure firewalld is running
+  ansible.builtin.service:
+    name: firewalld
+    enabled: true
+    state: started
+
+- name: Ensure SELinux is enforcing
+  ansible.posix.selinux:
+    policy: targeted
+    state: enforcing
+
+
+
+- name: Open ports
+  loop: "{{ firewall_rules }}"
+  firewalld:
+    port: "{{ item.port }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ firewall_rules }}"
+  when: item.port is defined
+
+- name: Enable services
+  loop: "{{ firewall_rules }}"
+  firewalld:
+    service: "{{ item.service }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  when: item.service is defined
+
+
+...

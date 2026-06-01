@@ -1,0 +1,67 @@
+---
+
+#
+# PACKAGES
+#
+
+
+- name: Install rsyslog
+  ansible.builtin.dnf:
+    name: rsyslog
+    state: present
+
+#
+# SERVER CONFIGURATION
+#
+
+- name: Create remote log directory
+  ansible.builtin.file:
+    path: "{{ remote_log_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  when: "'rsyslog_server' in group_names"
+
+- name: Configure rsyslog server
+  ansible.builtin.template:
+    src: rsyslog-server.conf.j2
+    dest: /etc/rsyslog.d/remote.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: "'rsyslog_server' in group_names"
+  notify: restart rsyslog
+
+#
+# CLIENT CONFIGURATION
+#
+
+- name: Configure rsyslog client forwarding
+  ansible.builtin.template:
+    src: rsyslog-client.conf.j2
+    dest: /etc/rsyslog.d/forward.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: "'rsyslog_clients' in group_names"
+  notify: restart rsyslog
+  
+  
+ - name: Ensure rsyslog is enabled and running
+  ansible.builtin.service:
+    name: rsyslog
+    enabled: true
+    state: started
+
+#
+# SELINUX
+#
+
+- name: Allow rsyslog TCP port in SELinux
+  ansible.posix.seboolean:
+    name: rsyslogd_network_connect
+    state: true
+    persistent: true
+
+...

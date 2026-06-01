@@ -1,0 +1,120 @@
+---
+#
+# INSTALL REQUIRED PACKAGES
+#
+
+- name: Install storage and NFS packages
+  ansible.builtin.dnf:
+    name: "{{ NFS_packages }}"
+    state: present
+
+#
+# CREATE VOLUME GROUP
+#
+
+- name: Create volume group
+  community.general.lvg:
+    vg: "{{ shared_vg }}"
+    pvs: "{{ shared_disk }}"
+
+#
+# CREATE LOGICAL VOLUME
+#
+
+- name: Create logical volume
+  community.general.lvol:
+    vg: "{{ shared_vg }}"
+    lv: "{{ shared_lv }}"
+    size: "{{ shared_lv_size }}"
+
+#
+# CREATE FILESYSTEM
+#
+
+- name: Create filesystem
+  community.general.filesystem:
+    fstype: "{{ shared_fs_type }}"
+    dev: "/dev/{{ shared_vg }}/{{ shared_lv }}"
+
+#
+# CREATE MOUNT DIRECTORY
+#
+
+- name: Create shared mount directory
+  ansible.builtin.file:
+    path: "{{ shared_mount }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+#
+# MOUNT FILESYSTEM
+#
+
+- name: Mount shared filesystem
+  ansible.posix.mount:
+    path: "{{ shared_mount }}"
+    src: "/dev/{{ shared_vg }}/{{ shared_lv }}"
+    fstype: "{{ shared_fs_type }}"
+    state: mounted
+
+#
+# CREATE USER SHARE ROOT
+#
+
+- name: Create users directory
+  ansible.builtin.file:
+    path: "{{ shared_users_root }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+#
+# CREATE PER-USER DIRECTORIES
+#
+
+- name: Create user share directories
+  ansible.builtin.file:
+  loop: "{{ managed_users }}"
+    path: "{{ shared_users_root }}/{{ item.name }}"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.groups | first | default(item.name) }}"
+    mode: '0755'
+  
+
+#
+# DEPLOY NFS EXPORTS
+#
+
+- name: Configure NFS exports
+  ansible.builtin.template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: '0644'
+  notify: reload exports
+
+#
+# ENABLE NFS SERVER
+#
+
+- name: Ensure NFS server is enabled and running
+  ansible.builtin.service:
+    name: "{{ nfs_service }}"
+    enabled: true
+    state: started
+
+
+
+- name: Enable NFS SELinux boolean
+  ansible.posix.seboolean:
+    name: nfs_export_all_rw
+    state: true
+    persistent: true
+    
+    
+...

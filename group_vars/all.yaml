@@ -1,0 +1,38 @@
+---
+domain_name: nexcore.local
+
+users_groups:
+  - ops
+  - dev
+  - marketing
+
+managed_users:
+  - name: ops01
+    groups:
+      - ops
+    sudo: true
+    ssh_key: "ssh-rsa AAAA...ops01"
+
+  - name: dev01
+    groups:
+      - dev
+    sudo: false
+    ssh_key: "ssh-rsa AAAA...dev01"
+
+  - name: dev02
+    groups:
+      - dev
+    sudo: false
+    ssh_key: "ssh-rsa AAAA...dev02"
+
+  - name: mkt01
+    groups:
+      - marketing
+    sudo: false
+    ssh_key: "ssh-rsa AAAA...mkt01"
+
+
+
+shared_mount: /mnt/shared
+shared_users_root: "{{ shared_mount }}/users"
+...

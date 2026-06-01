@@ -1,0 +1,5 @@
+{% for user in managed_users %}
+/home/{{ user.name }}/Company_Share  \
+-fstype=nfs,rw,soft,intr  \
+{{ nfs_server }}:{{ nfs_export_root }}/{{ user.name }}
+{% endfor %}

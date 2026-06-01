@@ -1,0 +1,18 @@
+---
+mariadb_service: mariadb
+
+mariadb_packages:
+  - mariadb-server
+  - python3-PyMySQL
+
+wordpress_db:
+  name: wordpress
+  user: wpuser
+  password: StrongPassword1
+
+mediawiki_db:
+  name: mediawiki
+  user: wikiuser
+  password: StrongPassword2
+ 
+ ...

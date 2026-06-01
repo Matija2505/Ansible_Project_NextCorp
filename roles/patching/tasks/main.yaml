@@ -1,0 +1,96 @@
+---
+#
+# PACKAGES
+#
+
+- name: Install required packages
+  dnf:
+    name:
+      - logrotate
+      - mailx
+      - dnf-utils
+    state: present
+
+#
+# HEALTHCHECK SCRIPT
+#
+
+- name: Deploy healthcheck script
+  template:
+    src: healthcheck.sh.j2
+    dest: "{{ healthcheck_script }}"
+    owner: root
+    group: root
+    mode: '0755'
+
+#
+# DAILY HEALTHCHECK CRON
+#
+
+- name: Configure daily healthcheck cron
+  cron:
+    name: "Daily NexCore healthcheck"
+    minute: "{{ healthcheck_minute }}"
+    hour: "{{ healthcheck_hour }}"
+    job: "{{ healthcheck_script }}"
+
+#
+# WEEKLY PACKAGE CLEANUP
+#
+
+- name: Configure weekly package cleanup
+  cron:
+    name: "Weekly package cleanup"
+    weekday: "{{ cleanup_weekday }}"
+    minute: "{{ cleanup_minute }}"
+    hour: "{{ cleanup_hour }}"
+    job: "dnf clean all"
+
+#
+# SYSTEM UPDATE CRON
+#
+
+- name: Configure nightly package updates
+  cron:
+    name: "Nightly package updates"
+    minute: "30"
+    hour: "2"
+    job: "/usr/bin/dnf -y update"
+
+#
+# REBOOT IF REQUIRED
+#
+
+- name: Deploy reboot-check script
+  copy:
+    dest: /usr/local/bin/reboot-if-required.sh
+    mode: '0755'
+    content: |
+      #!/bin/bash
+
+      needs-restarting -r
+
+      if [ $? -ne 0 ]; then
+          /usr/sbin/reboot
+      fi
+
+- name: Configure reboot check cron
+  cron:
+    name: "Reboot if required"
+    minute: "0"
+    hour: "5"
+    job: "/usr/local/bin/reboot-if-required.sh"
+
+#
+# LOGROTATE
+#
+
+- name: Configure logrotate for healthcheck log
+  template:
+    src: nexcore-health.logrotate.j2
+    dest: /etc/logrotate.d/nexcore-health
+    owner: root
+    group: root
+    mode: '0644'
+
+...

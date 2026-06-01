@@ -1,0 +1,8 @@
+---
+firewall_rules:
+  - service: dns
+  - port: 25/tcp
+  - port: 514/tcp
+  - port: 143/tcp
+  
+...

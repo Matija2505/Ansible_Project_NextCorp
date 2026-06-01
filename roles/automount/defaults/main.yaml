@@ -1,0 +1,13 @@
+---
+autofs_packages:
+  - autofs
+  - nfs-utils
+
+autofs_master_map: /etc/auto.master.d/companyshare.autofs
+autofs_map_file: /etc/auto.companyshare
+
+nfs_server: serverb
+nfs_export_root: "{{ shared_users_root }}"
+
+...
+

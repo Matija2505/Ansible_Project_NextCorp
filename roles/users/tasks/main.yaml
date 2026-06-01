@@ -1,0 +1,96 @@
+---
+#
+# CREATE GROUPS
+#
+
+- name: Create required groups
+  loop: "{{ user_groups }}"
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  
+
+#
+# CREATE USERS
+#
+
+- name: Create managed users
+  loop: "{{ managed_users }}"
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups | join(',') }}"
+    append: true
+    create_home: true
+    shell: /bin/bash
+    state: present
+  
+
+#
+# SSH DIRECTORIES
+#
+
+- name: Create .ssh directories
+  loop: "{{ managed_users }}"
+  ansible.builtin.file:
+    path: "/home/{{ item.name }}/.ssh"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.groups | first | default(item.name) }}"
+    mode: '0700'
+ 
+
+#
+# AUTHORIZED KEYS
+#
+
+- name: Deploy authorized_keys
+  loop: "{{ managed_users }}"
+  ansible.builtin.authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_key }}"
+    state: present
+  
+
+#
+# SUDO ACCESS
+#
+
+- name: Configure sudo access
+  ansible.builtin.copy:
+  loop: "{{ managed_users }}"
+    dest: "/etc/sudoers.d/{{ item.name }}"
+    content: "{{ item.name }} ALL=(ALL) NOPASSWD: ALL"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: '/usr/sbin/visudo -cf %s'
+  when: item.sudo | default(false)
+  
+
+#
+# SSH HARDENING
+#
+
+- name: Deploy sshd_config
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+  notify: restart sshd
+  
+  
+#
+# CREATE LOCAL AUTOFS MOUNTPOINTS
+#
+
+- name: Create Company_Share directories
+  loop: "{{ managed_users }}"
+  ansible.builtin.file:
+    path: "/home/{{ item.name }}/Company_Share"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.groups | first | default(item.name) }}"
+    mode: '0755'
+...

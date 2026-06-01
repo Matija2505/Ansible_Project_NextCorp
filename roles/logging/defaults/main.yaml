@@ -1,0 +1,6 @@
+---
+remote_log_dir: /var/log/remote
+rsyslog_server_host: servera.{{ domain_name }}
+
+...
+

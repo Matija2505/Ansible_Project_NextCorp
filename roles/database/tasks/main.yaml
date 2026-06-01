@@ -1,0 +1,75 @@
+---
+#
+# INSTALL PACKAGES
+#
+
+- name: Install MariaDB packages
+  ansible.builtin.dnf:
+    name: "{{ mariadb_packages }}"
+    state: present
+    
+#
+# DEPLOY CONFIGURATION
+#
+
+- name: Deploy MariaDB configuration
+  ansible.builtin.template:
+    src: mariadb-server.cnf.j2
+    dest: /etc/my.cnf.d/nexcore.cnf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart mariadb
+
+#
+# ENABLE SERVICE
+#
+
+- name: Ensure MariaDB is enabled and running
+  ansible.builtin.service:
+    name: "{{ mariadb_service }}"
+    enabled: true
+    state: started
+
+#
+# WORDPRESS DATABASE #
+# MEDIAWIKI DATABASE
+#
+#
+- name: Create application databases
+  loop:
+    - "{{ wordpress_db }}"
+    - "{{ mediawiki_db }}"
+  community.mysql.mysql_db:
+    name: "{{ item.name }}"
+    state: present
+
+
+- name: Create application database users
+  loop:
+    - "{{ wordpress_db }}"
+    - "{{ mediawiki_db }}"
+  community.mysql.mysql_user:
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.name }}.*:ALL"
+    host: '%'
+    state: present
+
+
+#
+# VALIDATE MYSQL
+#
+
+- name: Verify MariaDB is responding
+  ansible.builtin.command: mysqladmin ping -h localhost
+  changed_when: false
+
+
+
+- name: Allow Apache DB connections
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect_db
+    state: true
+    persistent: true
+...

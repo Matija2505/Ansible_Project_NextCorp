@@ -1,0 +1,18 @@
+options {
+    listen-on port 53 { {{ dns_listen_ip }}; };
+    listen-on-v6 { none; };
+
+    directory "/var/named";
+
+    allow-query { any; };
+
+    recursion yes;
+
+    dnssec-validation no;
+};
+
+zone "{{ dns_zone }}" IN {
+    type master;
+    file "{{ dns_zone }}.zone";
+};
+

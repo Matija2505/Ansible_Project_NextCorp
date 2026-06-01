@@ -1,0 +1,81 @@
+---
+#
+# INSTALL PACKAGES
+#
+
+- name: Install Postfix and mail utilities
+  ansible.builtin.dnf:
+    name: "{{ postfix_packages }}"
+    state: present
+
+#
+# CONFIGURE POSTFIX
+#
+
+- name: Deploy Postfix configuration
+  ansible.builtin.template:
+    src: main.cf.j2
+    dest: /etc/postfix/main.cf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart postfix
+
+#
+# ENABLE POSTFIX
+#
+
+- name: Ensure postfix is enabled and running
+  ansible.builtin.service:
+    name: postfix
+    enabled: true
+    state: started
+
+#
+# CREATE MAILDIR FOR USERS
+#
+
+- name: Create Maildir root
+  loop: "{{ managed_users }}"
+  ansible.builtin.file:
+    path: "/home/{{ item }}/Maildir"
+    state: directory
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0700'
+ 
+#
+# DOVECOT
+# 
+
+- name: Create Maildir subfolders
+  loop: "{{ managed_users | product(mail_folders) | list }}"
+  ansible.builtin.file:
+    path: "/home/{{ item.0 }}/Maildir/{{ item.1 }}"
+    state: directory
+    owner: "{{ item.0 }}"
+    group: "{{ item.0 }}"
+    mode: '0700'
+  
+
+- name: Deploy Dovecot configuration
+  ansible.builtin.template:
+    src: dovecot.conf.j2
+    dest: /etc/dovecot/dovecot.conf
+    mode: "0644"
+  notify: restart dovecot
+  
+
+#
+# TEST MAIL DELIVERY
+#
+
+- name: Send test email to ops01
+  ansible.builtin.command: >
+    mail -s "Ansible Mail Test" ops01@{{ mail_domain }}
+  args:
+    stdin: "NexCore mail test successful"
+  changed_when: false
+
+
+...

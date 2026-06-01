@@ -1,0 +1,14 @@
+---
+healthcheck_log: /var/log/nexcore-health.log
+healthcheck_script: /usr/local/bin/healthcheck.sh
+
+healthcheck_hour: "3"
+healthcheck_minute: "0"
+
+cleanup_hour: "4"
+cleanup_minute: "0"
+cleanup_weekday: "0"
+
+healthcheck_email: "ops01@nexcore.local"
+
+...

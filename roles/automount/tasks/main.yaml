@@ -1,0 +1,48 @@
+---
+#
+# INSTALL PACKAGES
+#
+
+- name: Install AutoFS and NFS utilities
+  ansible.builtin.dnf:
+    name: "{{ autofs_packages }}"
+    state: present
+
+#
+# CONFIGURE AUTOFS MASTER
+#
+
+- name: Configure AutoFS master map
+  ansible.builtin.template:
+    src: auto.master.j2
+    dest: "{{ autofs_master_map }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart autofs
+
+#
+# CONFIGURE AUTOFS MAP
+#
+
+- name: Configure Company Share map
+  ansible.builtin.template:
+    src: auto.share.j2
+    dest: "{{ autofs_map_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart autofs
+
+
+
+#
+# ENABLE AUTOFS
+#
+
+- name: Ensure autofs is enabled and running
+  ansible.builtin.service:
+    name: autofs
+    enabled: true
+    state: started
+

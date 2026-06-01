@@ -1,0 +1,22 @@
+---
+apache_service: httpd
+
+httpd_dir: /etc/httpd/conf.d
+wordpress_dir: /var/www/wordpress
+mediawiki_dir: /var/www/mediawiki
+
+wordpress_url: "http://www.{{ domain_name }}"
+mediawiki_url: "http://wiki.{{ domain_name }}"
+
+web_packages:
+  - httpd
+  - php
+  - php-mysqlnd
+  - php-gd
+  - php-xml
+  - php-mbstring
+  - php-json
+  - wget
+  - tar
+  
+...

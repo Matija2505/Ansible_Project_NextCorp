@@ -1,0 +1,18 @@
+myhostname = {{ mail_hostname }}
+mydomain = {{ mail_domain }}
+myorigin = $mydomain
+
+inet_interfaces = all
+inet_protocols = ipv4
+
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+
+home_mailbox = Maildir/
+
+mynetworks = {{ trusted_networks | join(', ') }}
+
+relayhost =
+
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+

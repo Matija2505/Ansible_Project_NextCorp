@@ -1,0 +1,8 @@
+---
+firewall_rules:
+  - service: http
+  - service: nfs
+  - service: rpc-bind
+  - service: mountd
+  
+...

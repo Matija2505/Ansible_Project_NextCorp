@@ -1,0 +1,21 @@
+
+---
+mail_domain: {{ domain_name }}
+mail_hostname: "mail.{{ mail_domain }}"
+
+trusted_networks:
+  - 127.0.0.0/8
+  - 10.0.0.0/24
+
+postfix_packages:
+  - postfix
+  - s-nail
+  - dovecot
+  - dovecot-imapd
+
+mail_folders:
+  - cur
+  - new
+  - tmp
+  
+...

@@ -1,0 +1,16 @@
+$TTL 86400
+
+@ IN SOA servera.{{ dns_zone }}. root.{{ dns_zone }}. (
+    2026052501
+    3600
+    1800
+    604800
+    86400 )
+
+@ IN NS servera.{{ dns_zone }}.
+
+{% for record in dns_records %}
+{{ record.name }} IN A {{ record.ip }}
+{% endfor %}
+
+@ IN MX 10 mail.{{ dns_zone }}.
