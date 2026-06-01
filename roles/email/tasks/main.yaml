@@ -38,10 +38,10 @@
 - name: Create Maildir root
   loop: "{{ managed_users }}"
   ansible.builtin.file:
-    path: "/home/{{ item }}/Maildir"
+    path: "/home/{{ item.name }}/Maildir"
     state: directory
-    owner: "{{ item }}"
-    group: "{{ item }}"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
     mode: '0700'
  
 #
