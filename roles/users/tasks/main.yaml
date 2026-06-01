@@ -71,14 +71,23 @@
 # SSH HARDENING
 #
 
-- name: Deploy sshd_config
-  ansible.builtin.template:
-    src: sshd_config.j2
-    dest: /etc/ssh/sshd_config
-    owner: root
-    group: root
-    mode: '0600'
+- name: Disable password authentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication no'
   notify: restart sshd
+
+
+
+#- name: Deploy sshd_config
+#  ansible.builtin.template:
+#    src: sshd_config.j2
+#    dest: /etc/ssh/sshd_config
+#    owner: root
+#    group: root
+#    mode: '0600'
+#  notify: restart sshd
   
   
 #
