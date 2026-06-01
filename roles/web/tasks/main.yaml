@@ -23,7 +23,7 @@
 #
 
 - name: Create web application directories
-    loop:
+  loop:
     - "{{ wordpress_dir }}"
     - "{{ mediawiki_dir }}"
   ansible.builtin.file:
@@ -52,7 +52,7 @@
 - name: Download MediaWiki
   ansible.builtin.unarchive:
     src: https://releases.wikimedia.org/mediawiki/1.41/mediawiki-1.41.1.tar.gz
-    dest: {{ mediawiki_dir }}
+    dest: "{{ mediawiki_dir }}"
     remote_src: true
     extra_opts: [--strip-components=1]
     creates: "{{ mediawiki_dir }}/index.php"
@@ -123,13 +123,13 @@
 #
 
 - name: Set SELinux context for WordPress
-  ansible.posix.sefcontext:
+  community.general.sefcontext:
     target: "{{ wordpress_dir }}(/.*)?"
     setype: httpd_sys_rw_content_t
     state: present
 
 - name: Set SELinux context for MediaWiki
-  ansible.posix.sefcontext:
+  community.general.sefcontext:
     target: "{{ mediawiki_dir }}(/.*)?"
     setype: httpd_sys_rw_content_t
     state: present
