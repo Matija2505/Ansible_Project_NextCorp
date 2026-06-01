@@ -1,3 +1,4 @@
 search {{ dns_search | default(dns_zone) }}
-nameserver {{ dns_nameserver | default(hostvars['servera']['ansible_host']) }}
+nameserver {{ dns_nameserver | default(hostvars['servera']['ansible_default_ipv4']['address']) }}
+
 
