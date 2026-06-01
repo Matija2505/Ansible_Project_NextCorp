@@ -1,10 +1,6 @@
 ---
 mariadb_service: mariadb
 
-mariadb_packages:
-  - mariadb-server
-  - python3-PyMySQL
-
 wordpress_db:
   name: wordpress
   user: wpuser
