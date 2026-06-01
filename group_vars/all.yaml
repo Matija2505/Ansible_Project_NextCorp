@@ -11,25 +11,25 @@ managed_users:
     groups:
       - ops
     sudo: true
-    ssh_key: "ssh-rsa AAAA...ops01"
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL9QK4jN8wG5R3Fq2JY1f6L7xP4mW7kN2sT8aD5eV1qA deploy-key-01"
 
   - name: dev01
     groups:
       - dev
     sudo: false
-    ssh_key: "ssh-rsa AAAA...dev01"
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM4cH2bK7vL9nQ3wX5rT8yP1aJ6mN0sD4eF7gH8iJ9kB deploy-key-02"
 
   - name: dev02
     groups:
       - dev
     sudo: false
-    ssh_key: "ssh-rsa AAAA...dev02"
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG7mP2qR4sT6uV8wX1yZ3aB5cD7eF9gH1iJ3kL5mN7oP deploy-key-03"
 
   - name: mkt01
     groups:
       - marketing
     sudo: false
-    ssh_key: "ssh-rsa AAAA...mkt01"
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH2jK4lM6nP8qR1sT3uV5wX7yZ9aB2cD4eF6gH8iJ0kL deploy-key-04"
 
 
 
