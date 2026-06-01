@@ -1,7 +1,7 @@
 ---
 domain_name: nexcore.local
 
-users_groups:
+user_groups:
   - ops
   - dev
   - marketing
