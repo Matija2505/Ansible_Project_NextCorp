@@ -12,18 +12,18 @@ dns_listen_ip: any
 
 dns_records:
   - name: servera
-    ip: "{{ hostvars['servera']['ansible_host'] }}"
+    ip: "{{ hostvars['servera']['ansible_default_ipv4']['address'] }}"
 
   - name: serverb
-    ip: "{{ hostvars['serverb']['ansible_host'] }}"
+    ip: "{{ hostvars['servera']['ansible_default_ipv4']['address'] }}"
 
   - name: wiki
-    ip: "{{ hostvars['serverb']['ansible_host'] }}"
+    ip: "{{ hostvars['servera']['ansible_default_ipv4']['address'] }}"
 
   - name: www
-    ip: "{{ hostvars['serverb']['ansible_host'] }}"
+    ip: "{{ hostvars['servera']['ansible_default_ipv4']['address'] }}"
 
   - name: mail
-    ip: "{{ hostvars['servera']['ansible_host'] }}"
+    ip: "{{ hostvars['servera']['ansible_default_ipv4']['address'] }}"
 
 ...
