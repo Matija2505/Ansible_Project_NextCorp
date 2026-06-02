@@ -99,7 +99,7 @@
   ansible.builtin.file:
     path: "/home/{{ item.name }}/Company_Share"
     state: directory
-    owner: "{{ item.name }}"
-    group: "{{ item.groups | first | default(item.name) }}"
-    mode: '0755'
+#    owner: "{{ item.name }}"
+#    group: "{{ item.groups | first | default(item.name) }}"
+#    mode: '0755'
 ...
