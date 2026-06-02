@@ -29,14 +29,14 @@
 # SSH DIRECTORIES
 #
 
-- name: Create .ssh directories
-  loop: "{{ managed_users }}"
-  ansible.builtin.file:
-    path: "/home/{{ item.name }}/.ssh"
-    state: directory
-    owner: "{{ item.name }}"
-    group: "{{ item.groups | first | default(item.name) }}"
-    mode: '0700'
+#- name: Create .ssh directories
+# loop: "{{ managed_users }}"
+# ansible.builtin.file:
+#    path: "/home/{{ item.name }}/.ssh"
+#    state: directory
+#    owner: "{{ item.name }}"
+#    group: "{{ item.groups | first | default(item.name) }}"
+#    mode: '0700'
  
 
 #
