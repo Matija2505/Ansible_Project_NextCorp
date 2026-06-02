@@ -27,7 +27,7 @@ managed_users:
 
   - name: mkt01
     groups:
-      - marketing
+      - mkt
     sudo: false
     ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH2jK4lM6nP8qR1sT3uV5wX7yZ9aB2cD4eF6gH8iJ0kL deploy-key-04"
 
