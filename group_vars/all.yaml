@@ -4,7 +4,7 @@ domain_name: nexcore.local
 user_groups:
   - ops
   - dev
-  - marketing
+  - makt
 
 managed_users:
   - name: ops01
