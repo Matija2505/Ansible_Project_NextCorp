@@ -4,5 +4,6 @@ firewall_rules:
   - service: nfs
   - service: rpc-bind
   - service: mountd
+  - service: mysql
   
 ...
