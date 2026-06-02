@@ -58,6 +58,17 @@
     creates: "{{ mediawiki_dir }}/index.php"
 
 #
+# RESTORE PERMISSIONS
+#
+
+- name: Create web application directories
+  ansible.builtin.file:
+    path: "{{ wordpress_dir }}"
+    owner: apache
+    group: apache
+    mode: '0755'
+
+#
 # WORDPRESS CONFIG
 #
 
