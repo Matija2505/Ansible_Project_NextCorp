@@ -3,9 +3,14 @@
 $wgSitename = "NexCore Wiki";
 
 $wgServer = "http://wiki.{{ domain_name }}";
-
+$wgScriptPath = "";
 $wgDBtype = "mysql";
-$wgDBserver = "serverb.{{ domain_name }}";
+$wgDBserver = "{{ hostvars['serverb'].ansible_default_ipv4.address }}";
 $wgDBname = "{{ mediawiki_db.name }}";
 $wgDBuser = "{{ mediawiki_db.user }}";
 $wgDBpassword = "{{ mediawiki_db.password }}";
+$wgMainCacheType = CACHE_NONE;
+$wgEnableEmail = true;
+$wgEmergencyContact = "ops01@{{ domain_name }}";
+$wgPasswordSender = "wiki@{{ domain_name }}";
+$wgShowExceptionDetails = true;
