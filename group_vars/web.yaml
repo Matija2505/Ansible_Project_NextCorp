@@ -13,6 +13,7 @@ web_packages:
   - php
   - php-mysqlnd
   - php-gd
+  - php-intl
   - php-xml
   - php-mbstring
   - php-json
