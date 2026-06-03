@@ -11,7 +11,7 @@ healthcheck_hour: "3"
 healthcheck_minute: "0"
 
 update_minute: "30"
-update_hour:"2"
+update_hour: "2"
 
 reboot_minute: "0"
 reboot_hour: "5"
