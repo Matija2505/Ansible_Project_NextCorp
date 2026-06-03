@@ -14,7 +14,7 @@
 
 - name: Deploy healthcheck script
   ansible.builtin.template:
-    src: healthcheck.sh.j2
+    src: healthcheck.j2
     dest: "{{ healthcheck_script }}"
     owner: root
     group: root
