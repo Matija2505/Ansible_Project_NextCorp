@@ -108,6 +108,19 @@
   notify: restart httpd
 
 #
+# MEDIAWIKI INICIALIZACIJA
+#
+
+- name: Initialize MediaWiki installation
+  ansible.builtin.command:
+    cmd: >
+      php maintenance/run.php update --quick
+    chdir: "{{ mediawiki_dir }}"
+  become: true
+  become_user: apache
+      
+
+#
 # APACHE VHOSTS
 #
 
