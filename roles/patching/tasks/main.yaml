@@ -61,7 +61,7 @@
 
 - name: Deploy reboot check script
   ansible.builtin.template:
-    src: restart-check.sh.j2
+    src: restart-check.j2
     dest: /usr/local/bin/restart-check.sh
     mode: '0755'
 
