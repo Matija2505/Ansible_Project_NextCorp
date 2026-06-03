@@ -98,26 +98,45 @@
 # MEDIAWIKI CONFIG
 #
 
-- name: Deploy LocalSettings.php
-  ansible.builtin.template:
-    src: LocalSettings.php.j2
-    dest: "{{ mediawiki_dir }}/LocalSettings.php"
-    owner: apache
-    group: apache
-    mode: '0644'
-  notify: restart httpd
+#- name: Deploy LocalSettings.php
+#  ansible.builtin.template:
+#    src: LocalSettings.php.j2
+#    dest: "{{ mediawiki_dir }}/LocalSettings.php"
+#    owner: apache
+#    group: apache
+#    mode: '0644'
+#  notify: restart httpd
 
 #
 # MEDIAWIKI INICIALIZACIJA
 #
 
+#- name: Initialize MediaWiki installation
+#  ansible.builtin.command:
+#    cmd: >
+#      php maintenance/run.php update --quick
+#    chdir: "{{ mediawiki_dir }}"
+#  become: true
+#  become_user: apache
+
+
 - name: Initialize MediaWiki installation
   ansible.builtin.command:
     cmd: >
-      php maintenance/run.php update --quick
-    chdir: "{{ mediawiki_dir }}"
-#  become: true
-#  become_user: apache
+      php maintenance/install.php
+      --dbname "{{ wiki_db }}"
+      --dbuser "{{ wiki_db_user }}"
+      --dbpass "{{ wiki_db_password }}"
+      --dbserver "{{ hostvars['serverb']['ansible_default_ipv4']['address'] }}"
+      --server "{{ wiki_site_url }}"
+      --scriptpath ""
+      --lang en
+      --pass "{{ wiki_admin_password }}"
+      "NexCore Wiki"
+      "{{ wiki_admin_user }}"
+    chdir: "{{ web_root_wiki }}"
+    creates: "{{ web_root_wiki }}/LocalSettings.php"
+
       
 
 #
