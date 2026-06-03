@@ -27,7 +27,7 @@
 
 - name: Ensure postfix is enabled and running
   ansible.builtin.service:
-    name: postfix
+    name: "{{ postfix_packages }}"
     enabled: true
     state: started
 
