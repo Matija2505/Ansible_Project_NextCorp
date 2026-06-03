@@ -125,7 +125,7 @@
     cmd: >
       php maintenance/install.php
       --dbname "{{ mediawiki_db.name }}"
-      --dbuser "{{ ediawiki_db.user }}"
+      --dbuser "{{ mediawiki_db.user }}"
       --dbpass "{{ mediawiki_db.password }}"
       --dbserver "{{ hostvars['serverb']['ansible_default_ipv4']['address'] }}"
       --server "http://wiki.{{ domain_name }}"
