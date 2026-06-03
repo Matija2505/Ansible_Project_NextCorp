@@ -128,7 +128,7 @@
       --dbuser "{{ ediawiki_db.user }}"
       --dbpass "{{ mediawiki_db.password }}"
       --dbserver "{{ hostvars['serverb']['ansible_default_ipv4']['address'] }}"
-      --server "{{ http://wiki.{{ domain_name }} }}"
+      --server "http://wiki.{{ domain_name }}"
       --scriptpath ""
       --lang en
       --pass "{{ mediawiki_db.password }}"
