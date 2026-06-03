@@ -4,11 +4,8 @@
 #
 
 - name: Install required packages
-  dnf:
-    name:
-      - logrotate
-#      - mailx
-      - dnf-utils
+  ansible.builtin.dnf:
+    name: "{{ maintenance_packages }}"
     state: present
 
 #
@@ -16,19 +13,20 @@
 #
 
 - name: Deploy healthcheck script
-  template:
+  ansible.builtin.template:
     src: healthcheck.sh.j2
     dest: "{{ healthcheck_script }}"
     owner: root
     group: root
     mode: '0755'
 
+
 #
 # DAILY HEALTHCHECK CRON
 #
 
 - name: Configure daily healthcheck cron
-  cron:
+  ansible.builtin.cron:
     name: "Daily NexCore healthcheck"
     minute: "{{ healthcheck_minute }}"
     hour: "{{ healthcheck_hour }}"
@@ -39,7 +37,7 @@
 #
 
 - name: Configure weekly package cleanup
-  cron:
+  ansible.builtin.cron:
     name: "Weekly package cleanup"
     weekday: "{{ cleanup_weekday }}"
     minute: "{{ cleanup_minute }}"
@@ -50,47 +48,39 @@
 # SYSTEM UPDATE CRON
 #
 
-- name: Configure nightly package updates
-  cron:
+- name: Configure package updates
+  ansible.builtin.cron:
     name: "Nightly package updates"
-    minute: "30"
-    hour: "2"
+    minute: "{{ update_minute }}"
+    hour: "{{ update_hour }}"
     job: "/usr/bin/dnf -y update"
 
 #
 # REBOOT IF REQUIRED
 #
 
-- name: Deploy reboot-check script
-  copy:
-    dest: /usr/local/bin/reboot-if-required.sh
+- name: Deploy reboot check script
+  ansible.builtin.template:
+    src: restart-check.sh.j2
+    dest: /usr/local/bin/restart-check.sh
     mode: '0755'
-    content: |
-      #!/bin/bash
 
-      needs-restarting -r
-
-      if [ $? -ne 0 ]; then
-          /usr/sbin/reboot
-      fi
-
-- name: Configure reboot check cron
-  cron:
-    name: "Reboot if required"
-    minute: "0"
-    hour: "5"
-    job: "/usr/local/bin/reboot-if-required.sh"
+- name: Schedule restart check 5 AM
+  ansible.builtin.cron:
+    name: "Reboot check"
+    minute: "{{ reboot_minute }}"
+    hour: "{{ reboot_hour }}"
+    job: "/usr/local/bin/restart-check.sh"
 
 #
 # LOGROTATE
 #
 
-- name: Configure logrotate for healthcheck log
-  template:
+- name: Configure logrotate
+  ansible.builtin.template:
     src: nexcore-health.logrotate.j2
     dest: /etc/logrotate.d/nexcore-health
     owner: root
     group: root
     mode: '0644'
-
 ...
