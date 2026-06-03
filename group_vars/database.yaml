@@ -9,6 +9,7 @@ wordpress_db:
 mediawiki_db:
   name: mediawiki
   user: wikiuser
+  user: wikiadmin
   password: StrongPassword2
  
 ...
