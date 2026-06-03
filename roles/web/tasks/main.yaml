@@ -124,18 +124,18 @@
   ansible.builtin.command:
     cmd: >
       php maintenance/install.php
-      --dbname "{{ wiki_db }}"
-      --dbuser "{{ wiki_db_user }}"
-      --dbpass "{{ wiki_db_password }}"
+      --dbname "{{ mediawiki_db.name }}"
+      --dbuser "{{ ediawiki_db.user }}"
+      --dbpass "{{ mediawiki_db.password }}"
       --dbserver "{{ hostvars['serverb']['ansible_default_ipv4']['address'] }}"
-      --server "{{ wiki_site_url }}"
+      --server "{{ http://wiki.{{ domain_name }} }}"
       --scriptpath ""
       --lang en
-      --pass "{{ wiki_admin_password }}"
+      --pass "{{ mediawiki_db.password }}"
       "NexCore Wiki"
-      "{{ wiki_admin_user }}"
-    chdir: "{{ web_root_wiki }}"
-    creates: "{{ web_root_wiki }}/LocalSettings.php"
+      "{{ mediawiki_db.admin }}"
+    chdir: "{{ mediawiki_dir }}"
+    creates: "{{ mediawiki_dir }}/LocalSettings.php"
 
       
 
