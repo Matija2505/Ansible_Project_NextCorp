@@ -4,5 +4,5 @@ firewall_rules:
   - port: 25/tcp
   - port: 514/tcp
   - port: 143/tcp
-  
+  - port: 993/tcp
 ...
