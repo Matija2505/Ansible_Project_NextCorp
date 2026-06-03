@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ! needs-restarting -r >/dev/null 2>&1; then
+    {% if reboot_mode == "safe" %}
+    echo "Reboot required on {{ inventory_hostname }}" >> /var/log/reboot-check.log
+    {% endif %}
+
+    /usr/bin/systemctl reboot
+fi
