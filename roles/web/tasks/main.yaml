@@ -116,8 +116,8 @@
     cmd: >
       php maintenance/run.php update --quick
     chdir: "{{ mediawiki_dir }}"
-  become: true
-  become_user: apache
+#  become: true
+#  become_user: apache
       
 
 #
