@@ -1,14 +1,24 @@
 ---
+maintenance_packages:
+  - logrotate
+  - dnf-utils
+  - dnf-plugins-core
+
 healthcheck_log: /var/log/nexcore-health.log
 healthcheck_script: /usr/local/bin/healthcheck.sh
 
 healthcheck_hour: "3"
 healthcheck_minute: "0"
 
+update_minute: "30"
+update_hour:"2"
+
+reboot_minute: "0"
+reboot_hour: "5"
+
 cleanup_hour: "4"
 cleanup_minute: "0"
 cleanup_weekday: "0"
 
 healthcheck_email: "ops01@nexcore.local"
-
 ...
