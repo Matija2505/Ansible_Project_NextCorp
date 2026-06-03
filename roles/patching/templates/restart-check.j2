@@ -2,7 +2,6 @@
 
 if ! needs-restarting -r >/dev/null 2>&1; then
     echo "Reboot required on {{ inventory_hostname }}" >> /var/log/reboot-check.log
-    {% endif %}
-
+   
     /usr/bin/systemctl reboot
 fi
